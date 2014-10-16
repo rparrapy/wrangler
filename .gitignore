@@ -1,0 +1,15 @@
+include
+lib
+bin
+share
+
+*.csv
+*.py[co]
+ 
+# Packages
+*.egg
+*.egg-info
+.Python
+
+# MacOSX
+.DS_Store

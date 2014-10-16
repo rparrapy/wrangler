@@ -4,6 +4,7 @@ bin
 share
 
 *.csv
+*.json
 *.py[co]
  
 # Packages

@@ -72,7 +72,7 @@ def csv_to_geojson(rows, header, out_file):
             "type" : "Feature",
             "geometry" : {
                 "type" : "Point",
-                "coordinates" : ["%s","%s"]},
+                "coordinates" : [%s, %s]},
                 "properties" : {
                     %s
                 }
@@ -82,7 +82,7 @@ def csv_to_geojson(rows, header, out_file):
     # the head of the geojson file
     output = \
         ''' \
-    { "type" : "Feature Collection",
+    { "type" : "FeatureCollection",
       "features" : [
         '''
 
@@ -93,13 +93,15 @@ def csv_to_geojson(rows, header, out_file):
         properties = ""
         for j in range(2, len(row)):
             if header[j] and row[j]:
-                properties += '\t\t\t\t\t"%s":"%s",\n' % (header[j], row[j].replace('"', '\\"'))
-        properties = properties[5:-1]
+                value = row[j].replace('"', '\\"').replace("\n", "\\n").replace("\t", "\\t").decode("utf8")
+                properties += '\t\t\t\t\t"%s":"%s",\n' % (header[j].decode("utf8"), value)
+        properties = properties[5:-2]
         output += template % (longitud, latitud, properties)
 
 
 
     # the tail of the geojson file
+    output = output[:-10]
     output += \
         ''' \
         ]
@@ -107,7 +109,7 @@ def csv_to_geojson(rows, header, out_file):
         '''
 
     outFileHandle = open(out_file, "w")
-    outFileHandle.write(output)
+    outFileHandle.write(output.encode("utf8"))
     outFileHandle.close()
 
 

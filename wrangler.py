@@ -5,6 +5,7 @@
 import utm
 import click
 import csv
+import datetime
 
 @click.command()
 @click.option('--input', prompt='Ingrese el nombre del archivo de entrada', help='Ruta al archivo csv de entrada.')
@@ -94,7 +95,14 @@ def csv_to_geojson(rows, header, out_file):
         for j in range(2, len(row)):
             if header[j] and row[j]:
                 value = row[j].replace('"', '\\"').replace("\n", "\\n").replace("\t", "\\t").decode("utf8")
-                properties += '\t\t\t\t\t"%s":"%s",\n' % (header[j].decode("utf8"), value)
+                try:
+                    value = int(value)
+                except ValueError:
+                    pass
+
+                if isinstance(value, basestring):
+                    value = '"' + value + '"'
+                properties += '\t\t\t\t\t"%s":%s,\n' % (header[j].decode("utf8"), value)
         properties = properties[5:-2]
         output += template % (longitud, latitud, properties)
 
@@ -111,7 +119,6 @@ def csv_to_geojson(rows, header, out_file):
     outFileHandle = open(out_file, "w")
     outFileHandle.write(output.encode("utf8"))
     outFileHandle.close()
-
 
 
 if __name__ == '__main__':

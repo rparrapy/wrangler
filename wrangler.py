@@ -9,9 +9,9 @@ import datetime
 
 @click.command()
 @click.option('--input', prompt='Ingrese el nombre del archivo de entrada', help='Ruta al archivo csv de entrada.')
-@click.option('--sector', default=0, help='Indice de la columna del sector.')
-@click.option('--y', default=1, help='Nombre de la columna dey.')
-@click.option('--x', default=2, help='Nombre de la columna dey.')
+@click.option('--sector', default=1, help='Indice de la columna del sector.')
+@click.option('--y', default=2, help='Nombre de la columna dey.')
+@click.option('--x', default=3, help='Nombre de la columna dex.')
 @click.option('--output', default='output.json', help='Ruta al archivo csv de salida.')
 @click.option('--verbose', is_flag=False)
 def convert_csv(input, sector, y, x, output, verbose):
@@ -103,6 +103,7 @@ def csv_to_geojson(rows, header, out_file):
                 if isinstance(value, basestring):
                     value = '"' + value + '"'
                 properties += '\t\t\t\t\t"%s":%s,\n' % (header[j].decode("utf8"), value)
+        
         properties = properties[5:-2]
         output += template % (longitud, latitud, properties)
 
